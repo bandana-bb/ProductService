@@ -10,7 +10,7 @@ public class CreateProductRequestDto {
     private String description;
     private String image;
     private String category;
-    private Double price;
+    private int price;
 
 
 }
