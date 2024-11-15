@@ -8,9 +8,9 @@ import lombok.Setter;
 public class CreateProductRequestDto {
     private String title;
     private String description;
-    private String image;
+    private double price;
     private String category;
-    private int price;
+    private String image;
 
 
 }

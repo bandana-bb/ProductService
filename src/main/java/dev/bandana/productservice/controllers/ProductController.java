@@ -48,7 +48,9 @@ public class ProductController {
 
     @PostMapping("/products/")
     public Product createProduct(@RequestBody CreateProductRequestDto createProductRequestDto){
-        return productServices.CreateProduct(createProductRequestDto.getTitle(),createProductRequestDto.getDescription(),
-                createProductRequestDto.getImage(),createProductRequestDto.getCategory(),createProductRequestDto.getPrice());
+        return productServices.CreateProduct(createProductRequestDto.getTitle(),
+                createProductRequestDto.getDescription(),
+                createProductRequestDto.getPrice(),createProductRequestDto.getCategory()
+                ,createProductRequestDto.getImage());
     }
 }

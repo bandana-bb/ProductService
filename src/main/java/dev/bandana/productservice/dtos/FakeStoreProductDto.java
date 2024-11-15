@@ -12,7 +12,7 @@ public class FakeStoreProductDto {
     private int id;
     private String title;
     private String description;
-    private int price;
+    private double price;
     private String image;
     private String category;
 
