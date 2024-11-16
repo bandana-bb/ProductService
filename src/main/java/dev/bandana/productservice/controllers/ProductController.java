@@ -1,6 +1,7 @@
 package dev.bandana.productservice.controllers;
 
 import dev.bandana.productservice.dtos.CreateProductRequestDto;
+import dev.bandana.productservice.dtos.UpdateProductRequestDto;
 import dev.bandana.productservice.models.Product;
 import dev.bandana.productservice.services.ProductServices;
 import org.springframework.http.HttpStatus;
@@ -58,8 +59,19 @@ public class ProductController {
 
     }
 
+
+    //*********Get all Category ***************
+
+
+    @RequestMapping("/products/categories")
+    public List<String> getAllCategory(){
+       return productServices.getAllCategory();
+    }
+
+
+
     /*
-    * Create a product
+    *  *************************Create a product
     *{
     * title:
     * description:
@@ -67,7 +79,7 @@ public class ProductController {
     * category:
     *
     * POST /products/
-    * */
+    *  ******************************************************************/
 
     @PostMapping("/products")
     public Product createProduct(@RequestBody CreateProductRequestDto createProductRequestDto){
@@ -76,4 +88,15 @@ public class ProductController {
                 createProductRequestDto.getPrice(),createProductRequestDto.getCategory()
                 ,createProductRequestDto.getImage());
     }
+
+    //Update a product
+    @PutMapping("/products/{id}")
+    public  Product UpdateProduct(@RequestBody UpdateProductRequestDto updateProductRequestDto, @PathVariable("id") int id) {
+        return productServices.UpdateProduct(updateProductRequestDto.getTitle(), updateProductRequestDto.getDescription(),
+                updateProductRequestDto.getPrice(), updateProductRequestDto.getCategory(), updateProductRequestDto.getImage(),
+                id);
+
+    }
 }
+
+

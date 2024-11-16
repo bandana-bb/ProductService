@@ -2,6 +2,8 @@ package dev.bandana.productservice.services;
 
 import dev.bandana.productservice.dtos.FakeStoreProductDto;
 import dev.bandana.productservice.models.Product;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -38,7 +40,8 @@ public class FakeStoreProductService implements ProductServices{
 
         //Response entity:-
 
-        ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponseEntity=restTemplate.getForEntity("https://fakestoreapi.com/products/" + id, FakeStoreProductDto.class);
+        ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponseEntity=
+                restTemplate.getForEntity("https://fakestoreapi.com/products/" + id, FakeStoreProductDto.class);
 
         if(fakeStoreProductDtoResponseEntity.getStatusCode()!=HttpStatus.valueOf(200)){
             //handle this exception.
@@ -50,6 +53,10 @@ public class FakeStoreProductService implements ProductServices{
         }
 
     return fakeStoreProductDto.toProduct();
+    }
+
+    public List<String> getAllCategory(){
+        return restTemplate.getForObject("https://fakestoreapi.com/products/categories", List.class);
     }
 
     @Override
@@ -64,5 +71,23 @@ public class FakeStoreProductService implements ProductServices{
 
              FakeStoreProductDto fakestoreDto1=   restTemplate.postForObject("https://fakestoreapi.com/products",fakeStoreProductDto,FakeStoreProductDto.class);
         return fakestoreDto1.toProduct();
+    }
+
+    @Override
+    public Product UpdateProduct(String title, String description, double price, String category, String imageUrl, int id) {
+        FakeStoreProductDto fakeStoreProductDto=new FakeStoreProductDto();
+        fakeStoreProductDto.setTitle(title);
+        fakeStoreProductDto.setDescription(description);
+        fakeStoreProductDto.setPrice(price);
+        fakeStoreProductDto.setCategory(category);
+        fakeStoreProductDto.setImage(imageUrl);
+        HttpEntity<FakeStoreProductDto> result = new HttpEntity<>(fakeStoreProductDto);
+        ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponseEntity=
+                restTemplate.exchange("https://fakestoreapi.com/products/{id}",
+                        HttpMethod.PUT,result, FakeStoreProductDto.class,id);
+// update entry by id
+        Product p=fakeStoreProductDtoResponseEntity.getBody().toProduct();
+          p.setId(id);
+          return p;
     }
 }
