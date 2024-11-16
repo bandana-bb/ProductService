@@ -3,6 +3,8 @@ package dev.bandana.productservice.controllers;
 import dev.bandana.productservice.dtos.CreateProductRequestDto;
 import dev.bandana.productservice.models.Product;
 import dev.bandana.productservice.services.ProductServices;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,9 +32,30 @@ public class ProductController {
     /*
     * GET /products/{id}
     * */
+
+    //Without Response entity
+//    @RequestMapping("/products/{id}")
+//    public Product getSingleProduct(@PathVariable("id") int id){
+//        return productServices.getSingleProduct(id);
+//    }
+
+
+   //with Response entity
+
+
     @RequestMapping("/products/{id}")
-    public Product getSingleProduct(@PathVariable("id") int id){
-        return productServices.getSingleProduct(id);
+    public ResponseEntity<Product> getSingleProduct(@PathVariable("id") int id){
+        Product p=productServices.getSingleProduct(id);
+        ResponseEntity<Product>  responseEntity_1;
+        if(p==null){
+            responseEntity_1= new ResponseEntity<>(p,HttpStatus.NOT_FOUND);
+        }
+        else{
+            responseEntity_1= new ResponseEntity<>(p,HttpStatus.OK);
+        }
+
+        return responseEntity_1;
+
     }
 
     /*
@@ -46,7 +69,7 @@ public class ProductController {
     * POST /products/
     * */
 
-    @PostMapping("/products/")
+    @PostMapping("/products")
     public Product createProduct(@RequestBody CreateProductRequestDto createProductRequestDto){
         return productServices.CreateProduct(createProductRequestDto.getTitle(),
                 createProductRequestDto.getDescription(),

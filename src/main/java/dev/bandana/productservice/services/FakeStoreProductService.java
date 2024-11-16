@@ -2,6 +2,8 @@ package dev.bandana.productservice.services;
 
 import dev.bandana.productservice.dtos.FakeStoreProductDto;
 import dev.bandana.productservice.models.Product;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,8 +30,26 @@ public class FakeStoreProductService implements ProductServices{
 
     @Override
     public Product getSingleProduct(long id) {
-        FakeStoreProductDto fakeStoreProductDto=restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeStoreProductDto.class);
-        return fakeStoreProductDto.toProduct();
+
+        //Without Respose Entuty
+//        FakeStoreProductDto fakeStoreProductDto=restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeStoreProductDto.class);
+//        return fakeStoreProductDto.toProduct();
+
+
+        //Response entity:-
+
+        ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponseEntity=restTemplate.getForEntity("https://fakestoreapi.com/products/" + id, FakeStoreProductDto.class);
+
+        if(fakeStoreProductDtoResponseEntity.getStatusCode()!=HttpStatus.valueOf(200)){
+            //handle this exception.
+
+        }
+        FakeStoreProductDto fakeStoreProductDto = fakeStoreProductDtoResponseEntity.getBody();
+        if(fakeStoreProductDto==null){
+            return null;
+        }
+
+    return fakeStoreProductDto.toProduct();
     }
 
     @Override
